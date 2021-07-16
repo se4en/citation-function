@@ -18,8 +18,8 @@ from scipy import spatial
 from nltk.corpus import stopwords
 import os
 
-reload(sys)  
-sys.setdefaultencoding('utf8')
+#reload(sys)
+#sys.setdefaultencoding('utf8')
 
 CITED_ID_TO_PHRASES = defaultdict(set)
 with open('../resources/arc-id-ngrams.2.tsv') as f:
@@ -72,7 +72,7 @@ PATH = '../data/arc-json/'
 def main(): 
 
     if len(sys.argv) < 2:
-        print 'Usage: convert_ARC_to_features.py arc-json-dir/ ftr-dir/ out-dir/'
+        print('Usage: convert_ARC_to_features.py arc-json-dir/ ftr-dir/ out-dir/')
         return
 
     input_dir = sys.argv[1]
@@ -103,7 +103,7 @@ def main():
 
     # files = files[:10]
 
-    print 'Saw %d papers to process' % (len(files))
+    print('Saw %d papers to process' % (len(files)))
 
     #[create_feature_file(fname, output_dir) for fname in files]
     Parallel(n_jobs=-1)(delayed(create_feature_file)(fname, feature_to_index, output_dir) for fname in files)
@@ -118,11 +118,11 @@ def create_feature_file(f, feature_to_index, output_dir):
     outfilename = output_dir + basename(f)[0:8] + ".ftr"
 
     if os.path.isfile(outfilename) and not os.path.getsize(outfilename) == 0:
-        print 'already created %s ; skipping ' % (outfilename)
+        print('already created %s ; skipping ' % (outfilename))
         return
 
     if not paper_id[1:3].isdigit():
-        print 'unexpected filename %s ; skipping ' % (basename(f))
+        print('unexpected filename %s ; skipping ' % (basename(f)))
         return
         
 
@@ -131,13 +131,13 @@ def create_feature_file(f, feature_to_index, output_dir):
         json_data = json.loads(jf.read())
         citation_vecs = get_paper_features(json_data)
         if len(citation_vecs) == 0:
-            print 'no citations in %s ; skipping ' % (basename(f))
+            print('no citations in %s ; skipping ' % (basename(f)))
             return
 
         outfile = open(outfilename, 'w')
         wr = writer(outfile, delimiter="\t")
       
-        print paper_id
+        print(paper_id)
 
         for cited_id, citation_id, feature_dict in citation_vecs:
                     
@@ -152,7 +152,7 @@ def create_feature_file(f, feature_to_index, output_dir):
         outfile.close()
 
 
-    print 'done with %s, wrote to %s' % (paper_id, outfilename)
+    print('done with %s, wrote to %s' % (paper_id, outfilename))
 
 def get_paper_features(annotated_data):
 
@@ -173,8 +173,8 @@ def get_paper_features(annotated_data):
         paper_features = get_context_features(citation_context, annotated_data)
               
         if len(paper_features) == 0:
-            print "Unable to find context and features in %s for %s; skipping..."\
-                % (json_fname, citation_context['citing_string'])
+            print("Unable to find context and features in %s for %s; skipping..."\
+                % (json_fname, citation_context['citing_string']))
             continue
 
         # Add the topics of this paper with the idea that some topics have
@@ -377,7 +377,7 @@ def get_paper_features_old(annotated_data):
 
         feature_dicts.append((cited_id, merged_vec))
 
-    print 'finished', citing_id
+    print('finished', citing_id)
 
     return feature_dicts
 

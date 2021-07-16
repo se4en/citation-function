@@ -35,7 +35,7 @@ def main():
         if c < MIN_FREQ:
             auto_stopwords.add(w)
 
-    print 'Trimmed vocab from %d to %d' % (len(wc), len(wc) - len(auto_stopwords))
+    print('Trimmed vocab from %d to %d' % (len(wc), len(wc) - len(auto_stopwords)))
 
     with open(input_file) as f, open(output_file, 'w') as outf:
         for line in f:

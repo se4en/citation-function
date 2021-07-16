@@ -4,10 +4,11 @@ import optparse
 import os
 import sys
 import re
+import gzip
 #from urllib2 import Request, build_opener, HTTPCookieProcessor
 import urllib
-import urllib2
-from cookielib import MozillaCookieJar
+#import urllib2
+#from cookielib import MozillaCookieJar
 import subprocess
 from bs4 import BeautifulSoup as bs
 import shlex
@@ -30,7 +31,7 @@ from fuzzywuzzy import fuzz
 
 from gensim.corpora.dictionary import Dictionary
 from gensim.models.ldamodel import LdaModel
-from gensim.models.wrappers import LdaMallet 
+#from gensim.models.wrappers import LdaMallet
 
 #from global_functions_march16_teufel import *
 from global_functions_march16 import *
@@ -45,14 +46,14 @@ PAPER_TO_HUB = defaultdict(Counter)
 PAPER_TO_AUTHORITY = defaultdict(Counter)
 PAPER_TO_LOAD_CENTRALITY = defaultdict(Counter)
 #with open('../resources/arc-paper-to-temporal-weight.2.tsv') as fh:
-with open('../working-files/arc-network-weights.tsv') as f:
-
+with open('../resources/arc-network-weights.tsv') as f:
+#with gzip.open('../resources/arc-network-weights.tsv.gz') as f:
     for line_no, line in enumerate(f):
         # Skip header
 
         if line_no == 0:
             continue
-        cols = line[:-1].split('\t')
+        cols = str(line[:-1]).split('\t')
         year = int(cols[0])
         paper_id = cols[1]
         if not paper_id in PAPER_TO_PAGE_RANK:
@@ -73,8 +74,9 @@ WORD_TO_VEC = {} # defaultdict(lambda: [ random.random(), random.random() ])
 
 if True:
     # Use a pre-processed subset that contains only those words in the ARC
-    with open('../resources/glove.840B.300d.ARC-subset.txt') as f:
-        print 'Loading GloVe vectors'
+    #with open('../resources/glove.840B.300d.ARC-subset.txt') as f:
+    with open('../resources/glove.840B.300d.txt') as f:
+        print('Loading GloVe vectors')
         line_no = 0
         for line in f:
             # break
@@ -82,9 +84,9 @@ if True:
             WORD_TO_VEC[cols[0]] = np.array(map(float, cols[1:]))
             line_no += 1
             if line_no % 100000 == 0:
-                print 'Loaded %d so far...' % (line_no)
+                print('Loaded %d so far...' % (line_no))
                 # break
-        print 'Done loading GloVe vectors'
+        print('Done loading GloVe vectors')
 
 def get_citance(citation_context, parsed_doc):
     return parsed_doc['sections'][citation_context['section']]\
@@ -137,7 +139,7 @@ def get_context_features(citation_context, parsed_doc):
     # What kind of paper is citing?
     citing_paper_id = parsed_doc['paper_id']
     if len(citing_paper_id) == 0:
-        print 'HELP', parsed_doc['file_id']
+        print('HELP', parsed_doc['file_id'])
         return {}
 
     if citing_paper_id[0] == 'J' or citing_paper_id[0] == 'Q':
@@ -170,10 +172,10 @@ def get_context_features(citation_context, parsed_doc):
     try:
         citePositionInSentence = sent.index(citing_string) / float(len(sent))
     except:
-        print '(%d:%d:%d) %s at %d in %s' % (citation_context['section'], \
+        print('(%d:%d:%d) %s at %d in %s' % (citation_context['section'], \
                                                  citation_context['subsection'], \
                                                  citation_context['sentence'], \
-                                                 citing_string, sent.find(citing_string), sent)
+                                                 citing_string, sent.find(citing_string), sent))
 
     citePositionInSentence = sent.index(citing_string) / float(len(sent))
         
@@ -356,9 +358,9 @@ def get_context_features(citation_context, parsed_doc):
 
     if cite_index >= 0:
         if 'segment_span' not in processed_sent[cite_index]:            
-            print sent
-            print '{"foo": ' + json.dumps(processed_sent) + "}"
-            print cite_index
+            print(sent)
+            print('{"foo": ' + json.dumps(processed_sent) + "}")
+            print(cite_index)
         else:
             span = processed_sent[cite_index]['segment_span']
             clause = processed_sent[span[0]:span[1]]
@@ -538,14 +540,14 @@ def get_context_features(citation_context, parsed_doc):
     ret_val.update(dep_path_features)
 
     if False and citation_context['citation_role'].startswith('Future'):
-        print '%s, %s:\n\tsentece: %s\n\tclause: %s' % (citation_context['citation_role'], citing_string, sent, to_str(processed_sent))
+        print('%s, %s:\n\tsentece: %s\n\tclause: %s' % (citation_context['citation_role'], citing_string, sent, to_str(processed_sent)))
         for k, v in ret_val.iteritems():
             f = float(v)
             z = int(v)
             s = str(v)
             if s != '0' and  z != 100:
-                print '\t%s\t%s' % (k, s)
-        print ''
+                print('\t%s\t%s' % (k, s))
+        print('')
 
     # print sent
     # print ret_val
@@ -807,7 +809,7 @@ def get_dependency_features(replaced_cite_sent, data_to_exclude=None):
         num_missing_fillers = 0
         num_fillers = 0
         for path, leaves in path_to_leaves.iteritems():
-            print path
+            print(path)
             if not path in path_to_gold_leaves:
                 #print '%s not in %s' % (str(path), str(path_to_gold_leaves.keys()))
                 # print '\tMISSING!'
@@ -847,7 +849,7 @@ def get_dependency_features(replaced_cite_sent, data_to_exclude=None):
         if num_scores > 0:
             pattern_feature_vals[label + "_sel_pref_sim"] = scores_sum / num_scores
 
-    print ''
+    print('')
     #print pattern_feature_vals
 
     return pattern_feature_vals

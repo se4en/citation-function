@@ -63,7 +63,7 @@ from sklearn.dummy import DummyClassifier
 csv.field_size_limit(sys.maxsize)
 
 if len(sys.argv) != 2:
-    print 'usage: run_cv.py feature-dir/'
+    print('usage: run_cv.py feature-dir/')
     sys.exit(1)
 
 feature_dir = sys.argv[1]
@@ -121,7 +121,7 @@ count = 0
 
 for fname in os.listdir(feature_dir):
     if '.ftr' not in fname:
-        print 'skipping ' + fname
+        print('skipping ' + fname)
         continue
     f = open(feature_dir + fname, "r")
     citing_paper_id = fname[0:8]
@@ -176,9 +176,9 @@ for fname in os.listdir(feature_dir):
 
 x = numpy.array(x)
 y = numpy.array(y)
-print x.shape, y.shape, len(paper_indices)
+print(x.shape, y.shape, len(paper_indices))
 
-print x.shape[1]/2
+print(x.shape[1]/2)
 
 ######################################
 # Data loaded -- now on to classification
@@ -274,30 +274,30 @@ for idx in range(TOTAL_PAPERS):
     macro_r = recall_score(ALL_Y_REAL, ALL_Y_PREDICTED, labels=labels, average='macro')
     micro_r = recall_score(ALL_Y_REAL, ALL_Y_PREDICTED, labels=labels, average='micro')
 
-    print 'Running accuracy after %d papers, %f macro F1 (P: %f, R: %f), %f micro F1 (P: %f, R: %f)' \
-        % (idx+1, macro_f1, macro_p, macro_r, micro_f1, micro_p, micro_r)
+    print('Running accuracy after %d papers, %f macro F1 (P: %f, R: %f), %f micro F1 (P: %f, R: %f)' \
+        % (idx+1, macro_f1, macro_p, macro_r, micro_f1, micro_p, micro_r))
     
-    print labels
-    print sklearn.metrics.confusion_matrix(ALL_Y_REAL, ALL_Y_PREDICTED, \
-        labels=labels)
-    print '---------------------\n\n'
+    print(labels)
+    print(sklearn.metrics.confusion_matrix(ALL_Y_REAL, ALL_Y_PREDICTED, \
+        labels=labels))
+    print('---------------------\n\n')
 
 # pe_debug.close()
   
 if make_gold_network:
     fw.close()
-print "---"
-print clf
-print "ACCURACY", numpy.mean(accscores)
+print("---")
+print(clf)
+print("ACCURACY", numpy.mean(accscores))
 
-print "Micro accuracy score", accuracy_score(ALL_Y_REAL, ALL_Y_PREDICTED)
+print("Micro accuracy score", accuracy_score(ALL_Y_REAL, ALL_Y_PREDICTED))
 
-print ' '.join(['Background', 'Motivation', 'Prior', 'Uses',  'Extends', 'CompareOrContrast', 'Future'])
+print(' '.join(['Background', 'Motivation', 'Prior', 'Uses',  'Extends', 'CompareOrContrast', 'Future']))
 #print ' '.join(['Positional', 'Essential'])
 
 
-print sklearn.metrics.confusion_matrix(ALL_Y_REAL, ALL_Y_PREDICTED, \
-    labels=['Background', 'Motivation', 'Prior', 'Uses',  'Extends', 'CompareOrContrast', 'Future'])
+print(sklearn.metrics.confusion_matrix(ALL_Y_REAL, ALL_Y_PREDICTED, \
+    labels=['Background', 'Motivation', 'Prior', 'Uses',  'Extends', 'CompareOrContrast', 'Future']))
 
 #print sklearn.metrics.confusion_matrix(ALL_Y_REAL, ALL_Y_PREDICTED, \
 #    labels=['Positional', 'Essential'])

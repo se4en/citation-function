@@ -1,6 +1,7 @@
 #!/bin/bash
 
-MALLET_HOME=/shared/0/resources/mallet-2.0.8/
+#MALLET_HOME=/shared/0/resources/mallet-2.0.8/
+MALLET_HOME=../mallet-2.0.8
 
 #for num_topics in `echo 1000` ; do
 for num_topics in `echo 100 ` ; do

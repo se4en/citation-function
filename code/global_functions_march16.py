@@ -6,8 +6,8 @@ import sys
 import re
 #from urllib2 import Request, build_opener, HTTPCookieProcessor
 import urllib
-import urllib2
-from cookielib import MozillaCookieJar
+#import urllib2
+#from cookielib import MozillaCookieJar
 import subprocess
 from bs4 import BeautifulSoup as bs
 import shlex
@@ -28,8 +28,8 @@ from difflib import SequenceMatcher
 from pycorenlp import StanfordCoreNLP
 from fuzzywuzzy import fuzz
 
-reload(sys)  
-sys.setdefaultencoding('utf8')
+#reload(sys)
+#sys.setdefaultencoding('utf8')
 
 
 
@@ -528,9 +528,9 @@ def get_citation_context_and_features(parscit_context, is_self_citation, text_se
             break
     if cite_index >= 0:
         if 'segment_span' not in processed_sent[cite_index]:            
-            print sent
-            print '{"foo": ' + json.dumps(processed_sent) + "}"
-            print cite_index
+            print(sent)
+            print('{"foo": ' + json.dumps(processed_sent) + "}")
+            print(cite_index)
         else:
             span = processed_sent[cite_index]['segment_span']
             clause = processed_sent[span[0]:span[1]]
@@ -675,18 +675,18 @@ def get_citation_context_and_features(parscit_context, is_self_citation, text_se
     ret_val.update(ante_action)
 
     if False and debug_label is not None:
-        print '%s, %s:\n\tsentece: %s\n\tclause: %s' % (debug_label, citing_string, sent, to_str(processed_sent))
+        print('%s, %s:\n\tsentece: %s\n\tclause: %s' % (debug_label, citing_string, sent, to_str(processed_sent)))
         for k, v in ret_val.iteritems():
             f = float(v)
             z = int(v)
             s = str(v)
             if s != '0' and  z != 100:
-                print '\t%s\t%s' % (k, s)
+                print('\t%s\t%s' % (k, s))
         if ret_val['DISTANCE_TO_CONTRAST'] < 100:
-            print '\tSentence with CONTRAST: ' + text_sents[idx+ret_val['DISTANCE_TO_CONTRAST']]
+            print('\tSentence with CONTRAST: ' + text_sents[idx+ret_val['DISTANCE_TO_CONTRAST']])
         if ret_val['DISTANCE_TO_COMPARE'] < 100:
-            print '\tSentence with COMPARE: ' + text_sents[idx+ret_val['DISTANCE_TO_COMPARE']]
-        print ''
+            print('\tSentence with COMPARE: ' + text_sents[idx+ret_val['DISTANCE_TO_COMPARE']])
+        print('')
 
     # print sent
     # print ret_val
@@ -724,7 +724,7 @@ def find_citation(parscit_context, text_sents, entire_text, citing_string):
     except ValueError as e:
         # This happens sometimes when Parscit encodes weird codepoints, which
         # break both NLTK and CoreNLP :(
-        print repr(e)
+        print(repr(e))
         # Indicate no context could be found
         return -1
 
@@ -2329,7 +2329,7 @@ def get_custom_pattern_features(citance, pre_sents, post_sents, cite_index, debu
             if pat_index < 0:
                 continue
             if debug is not None:
-                print 'found %s in %s' % (pattern, debug)
+                print('found %s in %s' % (pattern, debug))
 
             # If the pattern happens after the citation
             if cite_index < pat_index:
@@ -2351,7 +2351,7 @@ def get_custom_pattern_features(citance, pre_sents, post_sents, cite_index, debu
                 if pat_index < 0:
                     continue
                 if debug is not None:
-                    print 'found %s in %s' % (pattern, debug)
+                    print('found %s in %s' % (pattern, debug))
 
                 # If the pattern happens after the citation
                 if cite_index < pat_index:
@@ -2374,7 +2374,7 @@ def get_custom_pattern_features(citance, pre_sents, post_sents, cite_index, debu
                 if pat_index < 0:
                     continue
                 if debug is not None:
-                    print 'found %s in %s' % (pattern, debug)
+                    print('found %s in %s' % (pattern, debug))
 
                 # If the pattern happens after the citation
                 if cite_index < pat_index:
@@ -2415,7 +2415,7 @@ def get_formulaic_features(processed_sentence, cite_index, debug=None, prefix=No
             pat_index = find(pattern, processed_sentence, None, debug=debug, feature=feature_name)
             if pat_index >= 0:
                 if debug is not None:
-                    print 'found %s in %s' % (pattern, debug)
+                    print('found %s in %s' % (pattern, debug))
 
                 # If the pattern happens after the citation
                 if cite_index < pat_index:
@@ -2442,7 +2442,7 @@ def get_formulaic_features(processed_sentence, cite_index, debug=None, prefix=No
             pat_index = find(pattern, processed_sentence, False,  debug=debug, feature=feature_name + " (FORMULAIC)")
             if pat_index >= 0:
                 if debug is not None:
-                    print 'found %s (as FORMULAIC) in %s' % (pattern, debug)
+                    print('found %s (as FORMULAIC) in %s' % (pattern, debug))
 
                 # If the pattern happens after the citation
                 if cite_index < pat_index:
@@ -2474,7 +2474,7 @@ def get_agent_features(processed_sentence, cite_index, debug=None, prefix=None):
             pat_index = find(pattern, processed_sentence, True, debug=debug)
             if pat_index >= 0:
                 if debug is not None:
-                    print 'found %s in %s' % (pattern, debug)
+                    print('found %s in %s' % (pattern, debug))
 
                 # If the pattern happens after the citation
                 if cite_index < pat_index:
@@ -2501,7 +2501,7 @@ def find(pattern, sentence, must_have_subj_value, debug=None, feature=None):
     #    print json.dumps(sentence)
 
     if debug is not None:
-        print '\n\ntesting %s (%s) against "%s" (must be subj? %s)' % (pattern, feature, debug, must_have_subj_value)
+        print('\n\ntesting %s (%s) against "%s" (must be subj? %s)' % (pattern, feature, debug, must_have_subj_value))
 
 
 
@@ -2516,18 +2516,18 @@ def find(pattern, sentence, must_have_subj_value, debug=None, feature=None):
 
 
         if debug is not None:
-            print 'starting search at ' + sentence[i]['word']
+            print('starting search at ' + sentence[i]['word'])
 
         for j in range(0, pat_len):
 
             if debug is not None:
-                print '%d:%d:%d -> "%s" in "%s"?' % (i, j, k, sentence[i+j+k]['lemma'], pattern[j])
+                print('%d:%d:%d -> "%s" in "%s"?' % (i, j, k, sentence[i+j+k]['lemma'], pattern[j]))
 
             # Check that we won't search outside the sentence length due to
             # finding a MWE lexicon entry at the end of the sentence
             if i+j+k >= len(sentence):
                 if debug is not None:
-                    print 'moved beyond end of sentence :('
+                    print('moved beyond end of sentence :(')
                 match = False
                 break
 
@@ -2537,13 +2537,13 @@ def find(pattern, sentence, must_have_subj_value, debug=None, feature=None):
 
             pi =  pattern[j]
             if debug is not None:
-                print 'Testing %d/%d: %s' % (j+1, pat_len, pi)
+                print('Testing %d/%d: %s' % (j+1, pat_len, pi))
 
             # If this is a category that we have to look up
             if pi[0] == '@':
                 label = pi[1:]
                 if debug is not None:
-                    print 'Checking if "%s" is in %s' % (sentence[i+j+k]['lemma'], label)
+                    print('Checking if "%s" is in %s' % (sentence[i+j+k]['lemma'], label))
                 lexicon = None
                 required_pos = None
                 if label in ALL_CONCEPT_LEXICONS:
@@ -2564,7 +2564,7 @@ def find(pattern, sentence, must_have_subj_value, debug=None, feature=None):
                     break            
                 else:
                     if debug is not None:
-                        print 'YAY:: "%s" is in set %s in %s' % (sentence[i+j+k]['lemma'], label, debug)
+                        print('YAY:: "%s" is in set %s in %s' % (sentence[i+j+k]['lemma'], label, debug))
 
                 # If we did find a match, recognize that some phrases are
                 # multi-word expressions, so we may need to skip ahead more than
@@ -2582,29 +2582,29 @@ def find(pattern, sentence, must_have_subj_value, debug=None, feature=None):
                 
             elif pi == 'SELFCITATION':
                 if debug is not None:
-                    print 'Checking if "%s" is %s' % (sentence[i+j+k]['pos'][0], pi[1])
+                    print('Checking if "%s" is %s' % (sentence[i+j+k]['pos'][0], pi[1]))
 
                 if sentence[i+j+k]['word'] != pi:
                     if debug is not None:
-                        print '"%s" is not a %s in %s' % (sentence[i+j+k]['lemma'], pi, debug)
+                        print('"%s" is not a %s in %s' % (sentence[i+j+k]['lemma'], pi, debug))
                     match = False
                     break
                 else:
                     if debug is not None:
-                        print 'YAY:: "%s" is a %s in %s' % (sentence[i+j+k]['lemma'], pi, debug)
+                        print('YAY:: "%s" is a %s in %s' % (sentence[i+j+k]['lemma'], pi, debug))
 
             elif pi == 'CITATION':
                 if debug is not None:
-                    print 'Checking if "%s" is %s' % (sentence[i+j+k]['pos'][0], pi[1])
+                    print('Checking if "%s" is %s' % (sentence[i+j+k]['pos'][0], pi[1]))
 
                 if not sentence[i+j+k]['word'].endswith(pi):
                     if debug is not None:
-                        print '"%s" is not a %s in %s' % (sentence[i+j+k]['lemma'], pi, debug)
+                        print('"%s" is not a %s in %s' % (sentence[i+j+k]['lemma'], pi, debug))
                     match = False
                     break
                 else:
                     if debug is not None:
-                        print 'YAY:: "%s" is a %s in %s' % (sentence[i+j+k]['lemma'], pi, debug)
+                        print('YAY:: "%s" is a %s in %s' % (sentence[i+j+k]['lemma'], pi, debug))
 
     
             # Not sure if this is entirely right...
@@ -2616,49 +2616,49 @@ def find(pattern, sentence, must_have_subj_value, debug=None, feature=None):
             # If this is POS-match
             elif pi[0] == '#':
                 if debug is not None:
-                    print 'Checking if "%s" is  %s' % (sentence[i+j+k]['pos'][0], pi[1])
+                    print('Checking if "%s" is  %s' % (sentence[i+j+k]['pos'][0], pi[1]))
                 # NOTE: we compare only the coarsest POS tag level (N/V/J)
                 #
                 # NOTE Check for weird POS-tagging issues with verbal adjectives
                 if sentence[i+j+k]['pos'][0] != pi[1] and not (pi[1] == 'J' and sentence[i+j+k]['pos'] == 'VBN'):
                     match = False
                     if debug is not None:
-                        print '"%s" is not %s in %s' % (sentence[i+j+k]['pos'][0], pi[1], debug)
+                        print('"%s" is not %s in %s' % (sentence[i+j+k]['pos'][0], pi[1], debug))
                         break
                 else:
                     if debug is not None:
-                        print '"YAY:: %s" is %s in %s' % (sentence[i+j+k]['pos'][0], pi[1], debug)
+                        print('"YAY:: %s" is %s in %s' % (sentence[i+j+k]['pos'][0], pi[1], debug))
 
             # Otherwise, we have to match the word
             else:
                 if debug is not None:
-                    print 'Checking if "%s" is %s' % (sentence[i+j+k]['lemma'], pi)
+                    print('Checking if "%s" is %s' % (sentence[i+j+k]['lemma'], pi))
                 if sentence[i+j+k]['lemma'] != pi:
                     if debug is not None:
-                        print '"%s" is not %s in %s' % (sentence[i+j+k]['lemma'], pi, debug)
+                        print('"%s" is not %s in %s' % (sentence[i+j+k]['lemma'], pi, debug))
                     match = False
                     break
                 else:
                     if debug is not None:
-                        print 'YAY:: "%s" is %s in %s' % (sentence[i+j+k]['lemma'], pi, debug)       
+                        print('YAY:: "%s" is %s in %s' % (sentence[i+j+k]['lemma'], pi, debug))
 
         if match and (must_have_subj_value is not None) and (is_subj is not must_have_subj_value):
             if debug is not None:
-                print 'needed a subject for %s but this isn\'t one (%s != %s)' % (feature, is_subj, must_have_subj_value)
+                print('needed a subject for %s but this isn\'t one (%s != %s)' % (feature, is_subj, must_have_subj_value))
             continue
 
 
         # TODO: confirm we can skip 'j' items so i += j
         if match:
             if debug is not None:
-                print 'match!\n\n'
+                print('match!\n\n')
             return i
         else:
             if debug is not None:
-                print 'no match (%d, %d, %d)\n\n' % (i, j, k)
+                print('no match (%d, %d, %d)\n\n' % (i, j, k))
 
     if debug is not None:
-        print '\n\n'
+        print('\n\n')
 
     return -1
 
